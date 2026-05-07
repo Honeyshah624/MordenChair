@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: modern-chair
+  labels:
+    app: modern-chair
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: modern-chair
+  template:
+    metadata:
+      labels:
+        app: modern-chair
+    spec:
+      containers:
+        - name: modern-chair
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: website-files
+              mountPath: /usr/share/nginx/html/index.html
+              subPath: index.html
+            - name: website-files
+              mountPath: /usr/share/nginx/html/styles.css
+              subPath: styles.css
+      volumes:
+        - name: website-files
+          configMap:
+            name: modern-chair-files
